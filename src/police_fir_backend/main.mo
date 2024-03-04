@@ -271,40 +271,29 @@ actor {
   };
   var firs : [Fir] = [];
 
- public shared func updateFirStatus(firId: Text, newStatus: Text, policeOfficer: Text) : async {
-  let index = Array.findIndexOf<Fir>(
-    firs,
-    (f) => f.id == firId
-  );
-
-  if (index >= 0) {
-    let timestamp = Time.toText(Time.now());
-    firs := Array.modify(
+  public shared func updateFirStatus(firId : Text, newStatus : Text, policeOfficer : Text) : async {
+    let index = Array.findIndexOf<Fir>(
       firs,
-      index,
-      (f) => {
-        f with {
-          status = newStatus;
-          timestamp = timestamp;
-          updates = Array.append(f.updates, [(policeOfficer, timestamp)]);
-        };
-      }
+      (f) = > f.id == firId,
     );
-  } else {
-    // Handle FIR not found error
+
+    if (index >= 0) {
+      let timestamp = Time.toText(Time.now());
+      firs := Array.modify(
+        firs,
+        index,
+        (f) = > {
+          f with {
+            status = newStatus;
+            timestamp = timestamp;
+            updates = Array.append(f.updates, [(policeOfficer, timestamp)]);
+          };
+        },
+      );
+    } else {
+      // Handle FIR not found error
+    };
   };
-};
-
-public shared query func getFirDetails() : async [Fir] {
-  return firs;
-};
-
-
-
-  } else {
-    // Handle FIR not found error
-  };
-};
 
   public shared query func getFirDetails() : async [Fir] {
     return firs;
