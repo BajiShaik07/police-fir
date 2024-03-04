@@ -18,25 +18,15 @@ actor {
     #Female;
   };
 
-  type Record = {
-    userPrincipal : Principal;
-    policePrincipal : Principal;
-    addedOn : Time.Time;
-    requestUUID : Text;
-    prescription : Text;
-    attachment : Blob;
-  };
-  type FirDetails = {
-    userPrincipal : Principal;
-    incidentDetails : Text;
-    dateTime : Text;
-    complainantName : Text;
-    complainantContact : Text;
-    location : Text;
-    address : Text;
-    image : Blob;
-    video : Blob;
-  };
+  type Fir = {
+  complainantContact: Text;
+  complainantName: Text;
+  address: Text;
+  dateTime: Text;
+  location: Text;
+  incidentDetails: Text;
+};
+
 
   type Police = {
     name : Text;
@@ -53,8 +43,6 @@ actor {
     polices : [Principal];
     noofrecords : Nat;
     requests : [Text];
-    records : [Record];
-    firDetails : [FirDetails];
   };
 
   type RequestStatus = {
@@ -140,13 +128,11 @@ actor {
             case (null) {
               var user : User = {
                 name = name;
-                firDetails = [];
                 dob = dob;
                 gender = gender;
                 polices = [];
                 noofrecords = 0;
                 requests = [];
-                records = [];
               };
               users.put(msg.caller, user);
               return {
@@ -277,53 +263,18 @@ actor {
       };
     };
   };
-  public shared (msg) func createFir(
-    incidentDetails : Text,
-    dateTime : Text,
-    complainantName : Text,
-    complainantContact : Text,
-    location : Text,
-    address : Text,
-    image : Blob,
-    video : Blob,
-  ) : async {
-    statusCode : Nat;
-    msg : Text;
-  } {
-    if (not Principal.isAnonymous(msg.caller)) {
-      var user = users.get(msg.caller);
-      switch (user) {
-        case (?currentUser) {
-          var firDetail : FirDetails = {
-            userPrincipal = msg.caller;
-            incidentDetails = incidentDetails;
-            dateTime = dateTime;
-            complainantName = complainantName;
-            complainantContact = complainantContact;
-            location = location;
-            address = address;
-            image = image;
-            video = video;
-          };
-          currentUser.firDetails := List.push(firDetail, currentUser.firDetails);
+var firs : [Fir] = [];
 
-          return {
-            statusCode = 200;
-            msg = "FIR created successfully.";
-          };
-        };
-        case (null) {
-          return {
-            statusCode = 403;
-            msg = "User account not found.";
-          };
-        };
-      };
-    } else {
-      return {
-        statusCode = 404;
-        msg = "Connect wallet to access this function.";
-      };
-    };
-  };
+  /*public shared {
+    submitDonor : (Donor) -> async ();
+    getDonors : () -> async [Donor];
+  };*/
+
+  public shared func submitFir(fir : Fir) : async () {
+  firs := Array.append<Fir>(firs, [fir]);
+};
+
+public shared query func getFirDetails() : async [Fir] {
+  return firs;
+};
 };
