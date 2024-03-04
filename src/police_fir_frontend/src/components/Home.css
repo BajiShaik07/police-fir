@@ -1,0 +1,77 @@
+
+.h{
+  text-align: center;
+  color: blue;
+  font-family: 'Times New Roman', Times, serif;
+}
+.h a{
+  font-family: 'Times New Roman', Times, serif;
+}
+.t {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  text-align: right;
+  z-index: 2; /* Set a higher z-index value */
+  font-family: 'Times New Roman', Times, serif; /* Set font to Times New Roman */
+}
+
+.t a {
+  padding: 10px 20px; /* Add padding to style it like a button */
+  font-size: 16px;
+font-family: 'Times New Roman', Times, serif;
+  text-decoration: none; /* Remove the default underline for links */
+  color: #fff; /* Set text color to white */
+  background-color: red; /* Set background color */
+  border-radius: 5px; /* Add border-radius for rounded corners */
+  margin-right: 10px;
+}
+
+.t a:hover {
+  background-color: #0056b3; /* Change background color on hover */
+}
+
+.t button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: red;
+  color: #fff;
+  border: none;
+  font-family: 'Times New Roman', Times, serif;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.t button:hover {
+  background-color:#0056b3;
+}
+
+/* Style for the complaint background */
+.complaint-bg {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.complaint-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 30px;
+}
+
+/* Add styles for the header and navigation */
+header {
+  position: relative;
+  z-index: 1; /* Set a lower z-index value compared to .t */
+}
+
+/* Set a higher z-index value for the navigation bar to appear in front */
+nav {
+  position: relative;
+  z-index: 2; /* Set a higher z-index value */
+}
