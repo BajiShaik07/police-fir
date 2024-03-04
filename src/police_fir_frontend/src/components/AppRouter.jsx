@@ -6,6 +6,7 @@ import ClientProfile from './ClientNavbarProfile';
 import Signup from './SignUp';
 import Compliant from './Complaint' ;
 import CList from './CList';
+import PList from './PList';
 
 const AppRouter = () => {
   console.log("ko");
@@ -18,6 +19,7 @@ const AppRouter = () => {
       <Route path="/userprofile" element={<ClientProfile />} />
       <Route path="/complaint" element={<Compliant />} />
       <Route path="/clist" element={<CList />} />
+      <Route path="/plist" element={<CList />} />
 
     </Routes>
   );

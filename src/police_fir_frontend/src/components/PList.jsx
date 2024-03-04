@@ -7,6 +7,7 @@ const PList = () => {
   const [firs, setFirs] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBlurred, setIsBlurred] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState('');
 
   useEffect(() => {
     const fetchFir = async () => {
@@ -30,13 +31,15 @@ const PList = () => {
     // Implement your logout logic here
   };
 
-  const handleStatusUpdate = async (index, newStatus) => {
+  const handleStatusUpdate = async (index) => {
     try {
-      await police_fir_backend.updateFirStatus(firs[index].id, newStatus);
+      const policeOfficer = "John Doe"; // Replace with the actual police officer's name
+      await police_fir_backend.updateFirStatus(firs[index].id, selectedStatus, policeOfficer);
 
       const updatedFirs = [...firs];
-      updatedFirs[index].status = newStatus;
+      updatedFirs[index].status = selectedStatus;
       setFirs(updatedFirs);
+      setSelectedStatus(''); // Reset selected status after updating
     } catch (error) {
       console.error("Error updating status:", error);
     }
@@ -86,12 +89,22 @@ const PList = () => {
                   <td>{fir.location}</td>
                   <td>{fir.dateTime}</td>
                   <td>{fir.address}</td>
-                  <td className="status-cell">{fir.status}</td>
+                  <td className="status-cell">
+                    {fir.status}
+                    <ul>
+                      {fir.updates.map((update, updateIndex) => (
+                        <li key={updateIndex}>{`${update[0]} updated at ${update[1]}`}</li>
+                      ))}
+                    </ul>
+                  </td>
                   <td className="action-cell">
-                    <button onClick={() => handleStatusUpdate(index, 'Accepted')}>Accept</button>
-                    <button onClick={() => handleStatusUpdate(index, 'In Progress')}>In Progress</button>
-                    <button onClick={() => handleStatusUpdate(index, 'Completed')}>Completed</button>
-                    <button onClick={() => handleStatusUpdate(index, 'Fake Complaint')}>Fake Complaint</button>
+                    <button onClick={() => setSelectedStatus('Accepted')}>Accept</button>
+                    <button onClick={() => setSelectedStatus('Is Processing')}>Is Processing</button>
+                    <button onClick={() => setSelectedStatus('Give Witness Details')}>Give Witness Details</button>
+                    <button onClick={() => setSelectedStatus('pH Number Correctly')}>pH Number Correctly</button>
+                    <button onClick={() => setSelectedStatus('Once Came to Police Station')}>Once Came to Police Station</button>
+                    <button onClick={() => setSelectedStatus('Fake Complaint')}>Fake Complaint</button>
+                    {selectedStatus && <button onClick={() => handleStatusUpdate(index)}>Update Status</button>}
                   </td>
                 </tr>
               ))}

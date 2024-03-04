@@ -25,24 +25,30 @@ const CList = () => {
         <table>
           <thead>
             <tr>
+              <th>ID</th>
               <th>Complainant Name</th>
               <th>Contact</th>
               <th>Incident Details</th>
               <th>Location</th>
               <th>Date and Time</th>
               <th>Address</th>
+              <th>Status</th>
+              <th>Timestamp</th>
               {/* Add other table headers as needed */}
             </tr>
           </thead>
           <tbody>
             {firs.map((fir, index) => (
               <tr key={index}>
+                <td>{fir.id}</td>
                 <td>{fir.complainantName}</td>
                 <td>{fir.complainantContact}</td>
                 <td>{fir.incidentDetails}</td>
                 <td>{fir.location}</td>
                 <td>{fir.dateTime}</td>
                 <td>{fir.address}</td>
+                <td>{fir.status}</td>
+                <td>{fir.timestamp}</td>
                 {/* Add other table cells as needed */}
               </tr>
             ))}

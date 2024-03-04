@@ -11,6 +11,7 @@ import Iter "mo:base/Iter";
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
 import Buffer "mo:base/Buffer";
+import Shared "shared.mo";
 actor {
 
   type Gender = {
@@ -19,14 +20,19 @@ actor {
   };
 
   type Fir = {
-  complainantContact: Text;
-  complainantName: Text;
-  address: Text;
-  dateTime: Text;
-  location: Text;
-  incidentDetails: Text;
-};
-
+    id : Text;
+    complainantContact : Text;
+    complainantName : Text;
+    address : Text;
+    dateTime : Text;
+    location : Text;
+    incidentDetails : Text;
+    status : Text;
+    timestamp : Text;
+    updates : [(Text, Text)];
+    report_id : Text;
+    description : Text;
+  };
 
   type Police = {
     name : Text;
@@ -263,13 +269,44 @@ actor {
       };
     };
   };
-var firs : [Fir] = [];
+  var firs : [Fir] = [];
 
-  public shared func submitFir(fir : Fir) : async () {
-  firs := Array.append<Fir>(firs, [fir]);
+ public shared func updateFirStatus(firId: Text, newStatus: Text, policeOfficer: Text) : async {
+  let index = Array.findIndexOf<Fir>(
+    firs,
+    (f) => f.id == firId
+  );
+
+  if (index >= 0) {
+    let timestamp = Time.toText(Time.now());
+    firs := Array.modify(
+      firs,
+      index,
+      (f) => {
+        f with {
+          status = newStatus;
+          timestamp = timestamp;
+          updates = Array.append(f.updates, [(policeOfficer, timestamp)]);
+        };
+      }
+    );
+  } else {
+    // Handle FIR not found error
+  };
 };
 
 public shared query func getFirDetails() : async [Fir] {
   return firs;
 };
+
+
+
+  } else {
+    // Handle FIR not found error
+  };
+};
+
+  public shared query func getFirDetails() : async [Fir] {
+    return firs;
+  };
 };

@@ -4,13 +4,17 @@ import Cbg from "../../public/complaint.jpg";
 import "./Complaint.css";
 
 const Complaint = () => {
+  const defaultUserId = "123"; // Set a default user ID
   const initialFormData = {
+    id: defaultUserId,
     incidentDetails: "",
     dateTime: "",
     complainantName: "",
     complainantContact: "",
     location: "",
     address: "",
+    status: "Initial",
+    timestamp: new Date().toISOString(),
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -18,6 +22,29 @@ const Complaint = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleStatusUpdate = (newStatus) => {
+    setFormData({
+      ...formData,
+      status: newStatus,
+      timestamp: new Date().toISOString(),
+    });
+  };
+
+  const handleSearch = async (searchId) => {
+    const idToSearch = searchId || defaultUserId; // Use default if searchId is not provided
+    try {
+      const foundData = await police_fir_backend.searchFirById(idToSearch);
+      if (foundData) {
+        setFormData(foundData);
+      } else {
+        alert("FIR not found with the specified ID");
+      }
+    } catch (error) {
+      console.error("Error searching FIR:", error);
+      alert("Failed to search FIR. Please try again later.");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -43,6 +70,14 @@ const Complaint = () => {
         <div className="complaint-form">
           <h2>Submit FIR</h2>
           <form onSubmit={handleSubmit}>
+            <label htmlFor="id">Complaint ID:</label>
+            <input
+              type="text"
+              id="id"
+              name="id"
+              value={formData.id}
+              onChange={handleChange}
+            />
             <label htmlFor="incidentDetails">Incident Details:</label>
             <textarea
               id="incidentDetails"
@@ -102,11 +137,66 @@ const Complaint = () => {
               onChange={handleChange}
               required
             />
+            <label htmlFor="address">State And Pincode:</label>
+            <input
+              type="text"
+              id="state"
+              name="state"
+              value={formData.state}
+              onChange={handleChange}
+              required
+            />
+
+<label htmlFor="status">Status:</label>
+            <input
+              type="text"
+              id="status"
+              name="status"
+              value={formData.status}
+              readOnly
+            />
+
+            <label htmlFor="timestamp">Timestamp:</label>
+            <input
+              type="text"
+              id="timestamp"
+              name="timestamp"
+              value={formData.timestamp}
+              readOnly
+            />
+
+            <button
+              type="button"
+              className="btn"
+              onClick={() => handleStatusUpdate("Updated")}
+            >
+              Update Status
+            </button>
 
             <button type="submit" className="btn">
               Submit FIR
             </button>
           </form>
+
+          <div>
+            <h2>Search FIR by ID</h2>
+            <label htmlFor="searchId">Enter ID (Default: {defaultUserId}):</label>
+            <input
+              type="text"
+              id="searchId"
+              name="searchId"
+              value={formData.searchId}
+              onChange={(e) => setFormData({ ...formData, searchId: e.target.value })}
+            />
+
+            <button
+              type="button"
+              className="btn"
+              onClick={() => handleSearch(formData.searchId)}
+            >
+              Search
+            </button>
+          </div>
         </div>
       </div>
     </div>

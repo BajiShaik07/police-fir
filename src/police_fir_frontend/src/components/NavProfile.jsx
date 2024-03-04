@@ -149,7 +149,7 @@ const NavbarProfile = () => {
         />
         <div className={`dropdown-menu ${isMenuOpen ? 'open' : ''}`}>
           <div className="dropdown-box">
-            <Link className="button" to="/clist">Complaint Lists</Link>
+            <Link className="button" to="/plist">Complaint Lists</Link>
             <Link className="button" to="/profile_qr">QR Scan</Link>
           </div>
           <div className="dropdown-box">
