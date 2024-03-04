@@ -265,11 +265,6 @@ actor {
   };
 var firs : [Fir] = [];
 
-  /*public shared {
-    submitDonor : (Donor) -> async ();
-    getDonors : () -> async [Donor];
-  };*/
-
   public shared func submitFir(fir : Fir) : async () {
   firs := Array.append<Fir>(firs, [fir]);
 };
