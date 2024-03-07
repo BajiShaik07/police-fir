@@ -2,20 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { police_fir_backend } from "declarations/police_fir_backend";
 import './CList.css';
 
-const CList = () => { 
-  const [firs, setFirs] = useState([]);
+const CList = () => {
+  const [complaints, setComplaints] = useState([]);
 
   useEffect(() => {
-    const fetchFir = async () => {
+    const fetchComplaints = async () => {
       try {
-        const fetchedFir = await police_fir_backend.getFirDetails();
-        setFirs(fetchedFir);
+        const fetchedComplaints = await police_fir_backend.getComplaints(); // Replace with your actual function
+        setComplaints(fetchedComplaints);
       } catch (error) {
-        console.error("Error fetching Fir:", error);
+        console.error("Error fetching complaints:", error);
       }
     };
 
-    fetchFir();
+    fetchComplaints();
   }, []);
 
   return (
@@ -25,7 +25,7 @@ const CList = () => {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Complaint ID</th>
               <th>Complainant Name</th>
               <th>Contact</th>
               <th>Incident Details</th>
@@ -33,23 +33,19 @@ const CList = () => {
               <th>Date and Time</th>
               <th>Address</th>
               <th>Status</th>
-              <th>Timestamp</th>
-              {/* Add other table headers as needed */}
             </tr>
           </thead>
           <tbody>
-            {firs.map((fir, index) => (
-              <tr key={index}>
-                <td>{fir.id}</td>
-                <td>{fir.complainantName}</td>
-                <td>{fir.complainantContact}</td>
-                <td>{fir.incidentDetails}</td>
-                <td>{fir.location}</td>
-                <td>{fir.dateTime}</td>
-                <td>{fir.address}</td>
-                <td>{fir.status}</td>
-                <td>{fir.timestamp}</td>
-                {/* Add other table cells as needed */}
+            {complaints.map((complaint) => (
+              <tr key={complaint.id}>
+                <td>{complaint.id}</td>
+                <td>{complaint.complainantName}</td>
+                <td>{complaint.complainantContact}</td>
+                <td>{complaint.incidentDetails}</td>
+                <td>{complaint.location}</td>
+                <td>{complaint.dateTime}</td>
+                <td>{complaint.address}</td>
+                <td>{complaint.status}</td>
               </tr>
             ))}
           </tbody>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import '../Profile.css'; // Import the CSS file
-import Profile from './Profile.jsx';
+import CProfile from './CProfile.jsx';
 
 import { police_fir_backend } from "declarations/police_fir_backend";
 import { AuthClient } from "@dfinity/auth-client";
@@ -121,7 +121,6 @@ const ClientNavbarProfile = () => {
 
         <nav className="navbar"> {/* Use the class name directly */}
           <div className="logo">
-            <img src="logo.jpg" alt="User Logo" />
             <span className='nav-heading'>User</span>
           </div>
           <div className="profile">
@@ -136,7 +135,7 @@ const ClientNavbarProfile = () => {
             </button>
           </div>
         </nav>
-        <Profile
+        <CProfile
           principal={principal}
           name={name}
           dob={dob}

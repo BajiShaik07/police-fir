@@ -19,7 +19,7 @@ const AppRouter = () => {
       <Route path="/userprofile" element={<ClientProfile />} />
       <Route path="/complaint" element={<Compliant />} />
       <Route path="/clist" element={<CList />} />
-      <Route path="/plist" element={<CList />} />
+      <Route path="/plist" element={<PList />} />
 
     </Routes>
   );

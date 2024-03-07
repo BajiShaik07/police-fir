@@ -125,7 +125,6 @@ const NavbarProfile = () => {
 
         <nav className="navbar"> {/* Use the class name directly */}
           <div className="logo">
-            <img src="logo.jpg" alt="Police Logo" />
             <span className='nav-heading'>Police</span>
           </div>
           <div className="profile">
@@ -150,7 +149,6 @@ const NavbarProfile = () => {
         <div className={`dropdown-menu ${isMenuOpen ? 'open' : ''}`}>
           <div className="dropdown-box">
             <Link className="button" to="/plist">Complaint Lists</Link>
-            <Link className="button" to="/profile_qr">QR Scan</Link>
           </div>
           <div className="dropdown-box">
             <hr />

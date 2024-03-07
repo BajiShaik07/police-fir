@@ -19,11 +19,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 15px 20px 10px;
     color: #32d7db;
     position: fixed;
     width: 98vw;
-    background-color: #000;
+    background-image: url("../../public/nav.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
+		border-radius: 25px;
+		transition: 1s;
     z-index: 10;
   }
   
@@ -173,7 +177,7 @@
     width: 100%;
   }
   
-  .socialIcons {
+  .social-icons {
     margin-top: 10px;
     font-size: 20px;
   }
@@ -182,8 +186,8 @@
     cursor: pointer;
     margin: 0 10px;
     scale: 1.5;
+    transform: scale(1.5);
   }
-  
    /* Profile Styles */
   .profile-section {
   

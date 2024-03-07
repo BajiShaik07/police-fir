@@ -1,7 +1,7 @@
 import React from 'react';
 import '../Profile.css'; // Import the CSS file
 
-const Profile = ({ principal, name, dob, gender,doctorsVisited,NoofRecords, isBlurred }) => {
+const CProfile = ({ principal, name, dob, gender,doctorsVisited,NoofRecords, isBlurred }) => {
   const profileClass = isBlurred ? 'profile-section blurred' : 'profile-section';
 
   return (
@@ -31,4 +31,4 @@ const Profile = ({ principal, name, dob, gender,doctorsVisited,NoofRecords, isBl
   );
 };
 
-export default Profile;
+export default CProfile;

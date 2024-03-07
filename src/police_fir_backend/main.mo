@@ -11,7 +11,7 @@ import Iter "mo:base/Iter";
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
 import Buffer "mo:base/Buffer";
-import Shared "shared.mo";
+
 actor {
 
   type Gender = {
@@ -27,11 +27,9 @@ actor {
     dateTime : Text;
     location : Text;
     incidentDetails : Text;
-    status : Text;
     timestamp : Text;
     updates : [(Text, Text)];
-    report_id : Text;
-    description : Text;
+    state : Text;
   };
 
   type Police = {
@@ -269,33 +267,199 @@ actor {
       };
     };
   };
-  var firs : [Fir] = [];
 
-  public shared func updateFirStatus(firId : Text, newStatus : Text, policeOfficer : Text) : async {
-    let index = Array.findIndexOf<Fir>(
-      firs,
-      (f) = > f.id == firId,
-    );
-
-    if (index >= 0) {
-      let timestamp = Time.toText(Time.now());
-      firs := Array.modify(
-        firs,
-        index,
-        (f) = > {
-          f with {
-            status = newStatus;
-            timestamp = timestamp;
-            updates = Array.append(f.updates, [(policeOfficer, timestamp)]);
+  public shared query (msg) func policeScan(principal : Text) : async {
+    statusCode : Nat;
+    user : ?{
+      name : Text;
+      dob : Text;
+      gender : Gender;
+      noofrecords : Nat;
+    };
+    msg : Text;
+    is_having_access : Bool;
+    is_having_emergency : Bool;
+    is_pending : Bool;
+    request : ?Request;
+  } {
+    if (not Principal.isAnonymous(msg.caller)) {
+      var police = polices.get(msg.caller);
+      switch (police) {
+        case (null) {
+          return {
+            statusCode = 403;
+            user = null;
+            msg = "Only Polices can Access this method";
+            is_having_access = false;
+            is_having_emergency = false;
+            is_pending = false;
+            request = null;
           };
-        },
-      );
+        };
+        case (?police) {
+          var user_principal = Principal.fromText(principal);
+          var user = users.get(user_principal);
+          switch (user) {
+            case (null) {
+              return {
+                statusCode = 403;
+                user = null;
+                msg = "Invalid User QR Code Scanned.";
+                is_having_access = false;
+                is_having_emergency = false;
+                is_pending = false;
+                request = null;
+              };
+            };
+            case (?user) {
+              var is_having_access = false;
+              var is_having_emergency = false;
+              var is_pending = false;
+              var request_codes = Array.reverse(user.requests);
+              var req_ob : ?Request = null;
+              label name for (request_code in request_codes.vals()) {
+                req_ob := requests.get(request_code);
+                switch (req_ob) {
+                  case (null) {
+                    continue name;
+                  };
+                  case (?req_ob) {
+                    if (req_ob.policePrincipal == msg.caller) {
+                      if ((req_ob.status == #Nota or (req_ob.status == #Accept and req_ob.expries > Time.now())) and req_ob.isEmergency) {
+                        is_having_emergency := true;
+                      } else if ((req_ob.status == #Accept and req_ob.expries > Time.now()) and (not req_ob.isEmergency)) {
+                        is_having_access := true;
+                      } else if (req_ob.status == #Nota) {
+                        is_pending := true;
+                      };
+                    };
+                  };
+                };
+
+                if (is_having_access or is_having_emergency or is_pending) {
+                  break name;
+                };
+
+              };
+              var hiddenuser = {
+                name = user.name;
+                dob = user.dob;
+                gender = user.gender;
+                noofrecords = user.noofrecords;
+              };
+              return {
+                statusCode = 200;
+                user = ?hiddenuser;
+                msg = "Retrived Scan Details Successfully.";
+                is_having_access = is_having_access;
+                is_having_emergency = is_having_emergency;
+                is_pending = is_pending;
+                request = req_ob;
+              };
+            };
+          };
+        };
+      };
     } else {
-      // Handle FIR not found error
+      return {
+        statusCode = 404;
+        user = null;
+        msg = "Connect Wallet To Access This Function";
+        is_having_access = false;
+        is_having_emergency = false;
+        is_pending = false;
+        request = null;
+      };
     };
   };
 
+  var firs : [Fir] = [];
+
+  public shared func submitFir(fir : Fir) : async () {
+    firs := Array.append<Fir>(firs, [fir]);
+  };
+
+  public shared query func getSingleFir(id : Text) : async ?Fir {
+    // array.filter vadi single fir ni return cheyyali
+    return Array.find<Fir>(firs, func x = x.id == id);
+  };
+
+  public shared func addUpdateInFir(id : Text, subject : Text, description : Text) : async {
+    statusCode : Nat;
+    msg : Text;
+  } {
+    var fir = Array.find<Fir>(firs, func x = x.id == id);
+    // Array.append<Text>(doct_req, Array.make<Text>(uuid)) Array.size<Text>(doctor.requests)
+    switch (fir) {
+      case (null) {
+        return {
+          statusCode = 400;
+          msg = "Invalid id was Given.";
+        };
+      };
+      case (?fir) {
+        var newFir : Fir = {
+          id = fir.id;
+          complainantContact = fir.complainantContact;
+          complainantName = fir.complainantName;
+          address = fir.address;
+          dateTime = fir.dateTime;
+          location = fir.location;
+          incidentDetails = fir.incidentDetails;
+          timestamp = fir.timestamp;
+          updates = Array.append<(Text, Text)>(fir.updates, Array.make<(Text, Text)>((subject, description)));
+          state = fir.state;
+        };
+        var new_firs = Array.filter<Fir>(firs, func x = x.id != id);
+        new_firs := Array.append<Fir>(new_firs, [newFir]);
+        firs := new_firs;
+        return {
+          statusCode = 200;
+          msg = "Added Update to fir Successfully.";
+        };
+      };
+    };
+  };
+
+  public shared func updateStatusInFir(id : Text, status : Text) : async {
+    statusCode : Nat;
+    msg : Text;
+  } {
+    var fir = Array.find<Fir>(firs, func x = x.id == id);
+    // Array.append<Text>(doct_req, Array.make<Text>(uuid)) Array.size<Text>(doctor.requests)
+    switch (fir) {
+      case (null) {
+        return {
+          statusCode = 400;
+          msg = "Invalid id was Given.";
+        };
+      };
+      case (?fir) {
+        var newFir : Fir = {
+          id = fir.id;
+          complainantContact = fir.complainantContact;
+          complainantName = fir.complainantName;
+          address = fir.address;
+          dateTime = fir.dateTime;
+          location = fir.location;
+          incidentDetails = fir.incidentDetails;
+          status = status;
+          timestamp = fir.timestamp;
+          updates = fir.updates;
+          state = fir.state;
+        };
+        var new_firs = Array.filter<Fir>(firs, func x = x.id != id);
+        new_firs := Array.append<Fir>(new_firs, [newFir]);
+        firs := new_firs;
+        return {
+          statusCode = 200;
+          msg = "Updated Status in fir Successfully.";
+        };
+      };
+    };
+  };
   public shared query func getFirDetails() : async [Fir] {
     return firs;
   };
+
 };
