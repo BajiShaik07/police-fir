@@ -21,36 +21,29 @@ const PList = () => {
     fetchFir();
   }, []);
 
-  const handleAddUpdate = async (id) => {
+  const handleAddUpdate = async (complaintId) => {
     try {
-      await police_fir_backend.addUpdateInFir(id, updateSubject, updateDescription);
+      const timestamp = new Date().toISOString();
+      await police_fir_backend.addUpdateInFir(complaintId, updateSubject, updateDescription, timestamp);
       const updatedFirs = await police_fir_backend.getFirDetails();
       setFirs(updatedFirs);
       setUpdateSubject('');
       setUpdateDescription('');
+      alert("Update added successfully!");
     } catch (error) {
       console.error("Error adding update:", error);
     }
   };
 
-  const handleStatusUpdate = async (id) => {
+  const handleStatusUpdate = async (complaintId) => {
     try {
-      await police_fir_backend.updateStatusInFir(id, newStatus);
+      await police_fir_backend.updateStatusInFir(complaintId, newStatus);
       const updatedFirs = await police_fir_backend.getFirDetails();
       setFirs(updatedFirs);
       setNewStatus('');
+      alert("Status updated successfully!");
     } catch (error) {
       console.error("Error updating status:", error);
-    }
-  };
-
-  const handleFetchSingleFir = async (id) => {
-    try {
-      const singleFir = await police_fir_backend.getSingleFir(id);
-      console.log("Single FIR:", singleFir);
-      // Handle the single FIR data as needed
-    } catch (error) {
-      console.error("Error fetching single FIR:", error);
     }
   };
 
@@ -58,6 +51,33 @@ const PList = () => {
     <div className='complaint-container'>
       <div className='complaint-list'>
         <h2>Complaint List</h2>
+        <div className="input-container">
+          <label htmlFor="updateSubject">Update Subject:</label>
+          <input
+            type="text"
+            id="updateSubject"
+            value={updateSubject}
+            onChange={(e) => setUpdateSubject(e.target.value)}
+          />
+        </div>
+        <div className="input-container">
+          <label htmlFor="updateDescription">Update Description:</label>
+          <input
+            type="text"
+            id="updateDescription"
+            value={updateDescription}
+            onChange={(e) => setUpdateDescription(e.target.value)}
+          />
+        </div>
+        <div className="input-container">
+          <label htmlFor="newStatus">New Status:</label>
+          <input
+            type="text"
+            id="newStatus"
+            value={newStatus}
+            onChange={(e) => setNewStatus(e.target.value)}
+          />
+        </div>
         <table>
           <thead>
             <tr>
@@ -74,8 +94,8 @@ const PList = () => {
           </thead>
           <tbody>
             {firs.map((fir) => (
-              <tr key={fir.id}>
-                <td>{fir.id}</td>
+              <tr key={fir.complaintId}>
+                <td>{fir.complaintId}</td>
                 <td>{fir.complainantName}</td>
                 <td>{fir.complainantContact}</td>
                 <td>{fir.incidentDetails}</td>
@@ -86,14 +106,13 @@ const PList = () => {
                   {fir.status}
                   <ul>
                     {fir.updates.map((update, updateIndex) => (
-                      <li key={updateIndex}>{`${update[0]}: ${update[1]}`}</li>
+                      <li key={updateIndex}>{`${update[0]}: ${update[1]} - ${update[2]}`}</li>
                     ))}
                   </ul>
                 </td>
                 <td className="action-cell">
-                  <button onClick={() => handleAddUpdate(fir.id)}>Add Update</button>
-                  <button onClick={() => handleStatusUpdate(fir.id)}>Update Status</button>
-                  <button onClick={() => handleFetchSingleFir(fir.id)}>Fetch Single FIR</button>
+                  <button onClick={() => handleAddUpdate(fir.complaintId)}>Add Update</button>
+                  <button onClick={() => handleStatusUpdate(fir.complaintId)}>Update Status</button>
                 </td>
               </tr>
             ))}

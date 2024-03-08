@@ -148,8 +148,6 @@ const ClientNavbarProfile = () => {
           <div className='dropdown-box'>
             <Link className='button' to="/complaint">Raise Complaint</Link>
             <Link className='button' to="/clist">Complaint List</Link>
-            <Link className='button' to="/user_qr">QR Scan</Link>
-            <a className='button' href="https://0fea70bb93826fd071.gradio.live">Chat Bot</a>
           </div>
           <div className='dropdown-box'>
             <hr />
