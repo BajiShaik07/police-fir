@@ -1,8 +1,14 @@
 {
-    "backend": {
-      "ic": "by6od-j4aaa-aaaaa-qaadq-cais"
-    },
-    "frontend": {
-      "ic": "b77ix-eeaaa-aaaaa-qaada-cai"
-    }
+  "backend": {
+    "ic": "by6od-j4aaa-aaaaa-qaadq-cais"
+  },
+  "frontend": {
+    "ic": "b77ix-eeaaa-aaaaa-qaada-cai"
+  },
+  "police_fir_backend": {
+    "ic": "x6r2z-hiaaa-aaaak-afouq-cai"
+  },
+  "police_fir_frontend": {
+    "ic": "xxsrf-raaaa-aaaak-afova-cai"
   }
+}
