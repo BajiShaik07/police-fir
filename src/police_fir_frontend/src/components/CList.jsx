@@ -12,6 +12,7 @@ const CList = () => {
       try {
         const fetchedFir = await police_fir_backend.getFirDetails();
         setFirs(fetchedFir);
+        console.log("FIR details fetched successfully:", fetchedFir);
       } catch (error) {
         console.error("Error fetching Fir:", error);
       }
@@ -20,56 +21,46 @@ const CList = () => {
     fetchFir();
   }, []);
 
-  const handleFetchSingleFir = async (complaintId) => {
-    try {
-      const singleFir = await police_fir_backend.getSingleFir(complaintId);
-      console.log("Single FIR:", singleFir);
-      // Handle the single FIR data as needed
-    } catch (error) {
-      console.error("Error fetching single FIR:", error);
-    }
-  };
-
   return (
-    <div className='complaint-container'>
-      <div className='complaint-list'>
-        <h2>Complaint List</h2>
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Complaint ID</th>
-                <th>Complainant Name</th>
-                <th>Contact</th>
-                <th>Incident Details</th>
-                <th>Location</th>
-                <th>Date and Time</th>
-                <th>Address</th>
-                <th>Status</th>
-                <th>Timestamp</th>
-                <th>Actions</th>
+    <div className='complaint-list'>
+      <h2>Complaint List</h2>
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Complaint ID</th>
+              <th>Complainant Name</th>
+              <th>Contact</th>
+              <th>Incident Details</th>
+              <th>Location</th>
+              <th>Date and Time</th>
+              <th>Address</th>
+              <th>State</th>
+              <th>Status</th>
+              <th>Timestamp</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {firs.map((fir) => (
+              <tr key={fir.id}>
+                <td>{fir.id}</td>
+                <td>{fir.complainantName}</td>
+                <td>{fir.complainantContact}</td>
+                <td>{fir.incidentDetails}</td>
+                <td>{fir.location}</td>
+                <td>{fir.dateTime}</td>
+                <td>{fir.address}</td>
+                <td>{fir.state}</td>
+                <td>{fir.status}</td>
+                <td>{fir.timestamp}</td>
+                <td>
+                  {/* Add your action buttons here */}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {firs.map((fir) => (
-                <tr key={fir.complaintId}>
-                  <td>{fir.complaintId}</td>
-                  <td>{fir.complainantName}</td>
-                  <td>{fir.complainantContact}</td>
-                  <td>{fir.incidentDetails}</td>
-                  <td>{fir.location}</td>
-                  <td>{fir.dateTime}</td>
-                  <td>{fir.address}</td>
-                  <td>{fir.status}</td>
-                  <td>{fir.timestamp}</td>
-                  <td>
-                    <button onClick={() => handleFetchSingleFir(fir.complaintId)}>Fetch Single FIR</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

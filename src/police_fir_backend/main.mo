@@ -30,6 +30,7 @@ actor {
     timestamp : Text;
     updates : [(Text, Text)];
     state : Text;
+    // status :Text;
   };
 
   type Police = {

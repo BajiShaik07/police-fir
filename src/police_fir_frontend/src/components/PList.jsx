@@ -1,18 +1,22 @@
+// PList.jsx
+
 import React, { useState, useEffect } from 'react';
 import { police_fir_backend } from "declarations/police_fir_backend";
 import './PList.css';
 
 const PList = () => {
   const [firs, setFirs] = useState([]);
-  const [newStatus, setNewStatus] = useState('');
-  const [updateSubject, setUpdateSubject] = useState('');
-  const [updateDescription, setUpdateDescription] = useState('');
+  const [selectedComplaintId, setSelectedComplaintId] = useState('');
+  const [statusUpdate, setStatusUpdate] = useState('');
+  const [actionUpdate, setActionUpdate] = useState('');
+  const [selectedComplaintStatus, setSelectedComplaintStatus] = useState('');
 
   useEffect(() => {
     const fetchFir = async () => {
       try {
         const fetchedFir = await police_fir_backend.getFirDetails();
         setFirs(fetchedFir);
+        console.log("FIR details fetched successfully:", fetchedFir);
       } catch (error) {
         console.error("Error fetching Fir:", error);
       }
@@ -21,103 +25,142 @@ const PList = () => {
     fetchFir();
   }, []);
 
-  const handleAddUpdate = async (complaintId) => {
+  const handleUpdateStatus = async (complaintId) => {
     try {
-      const timestamp = new Date().toISOString();
-      await police_fir_backend.addUpdateInFir(complaintId, updateSubject, updateDescription, timestamp);
-      const updatedFirs = await police_fir_backend.getFirDetails();
-      setFirs(updatedFirs);
-      setUpdateSubject('');
-      setUpdateDescription('');
-      alert("Update added successfully!");
-    } catch (error) {
-      console.error("Error adding update:", error);
-    }
-  };
+      await police_fir_backend.updateStatusInFir(complaintId, statusUpdate);
 
-  const handleStatusUpdate = async (complaintId) => {
-    try {
-      await police_fir_backend.updateStatusInFir(complaintId, newStatus);
       const updatedFirs = await police_fir_backend.getFirDetails();
       setFirs(updatedFirs);
-      setNewStatus('');
-      alert("Status updated successfully!");
+
+      const updatedFir = updatedFirs.find(fir => fir.id === complaintId);
+      if (updatedFir) {
+        setSelectedComplaintStatus(`Status: ${updatedFir.status} (Updated)`);
+      }
+
+      console.log(`Status updated successfully for Complaint ID: ${complaintId}`);
+      console.log("Updated FIR details:", updatedFirs);
+      console.log("Selected Complaint Status:", selectedComplaintStatus);
+
+      setSelectedComplaintId('');
+      setStatusUpdate('');
     } catch (error) {
       console.error("Error updating status:", error);
     }
   };
 
+  const handleUpdateAction = async (complaintId) => {
+    try {
+      await police_fir_backend.addUpdateInFir(complaintId, 'Action', actionUpdate);
+
+      const updatedFirs = await police_fir_backend.getFirDetails();
+      setFirs(updatedFirs);
+
+      const updatedFir = updatedFirs.find(fir => fir.id === complaintId);
+      if (updatedFir) {
+        setSelectedComplaintStatus(`Action: ${updatedFir.updates[0].text} (Updated)`);
+      }
+
+      console.log(`Action updated successfully for Complaint ID: ${complaintId}`);
+      console.log("Updated FIR details:", updatedFirs);
+      console.log("Selected Complaint Status:", selectedComplaintStatus);
+
+      setSelectedComplaintId('');
+      setActionUpdate('');
+    } catch (error) {
+      console.error("Error updating action:", error);
+    }
+  };
+
   return (
-    <div className='complaint-container'>
-      <div className='complaint-list'>
-        <h2>Complaint List</h2>
+    <div className='status-container'>
+      <div className='update-section'>
+        <h2>Update Status and Action</h2>
         <div className="input-container">
-          <label htmlFor="updateSubject">Update Subject:</label>
+          <label htmlFor="complaintId">Complaint ID:</label>
           <input
             type="text"
-            id="updateSubject"
-            value={updateSubject}
-            onChange={(e) => setUpdateSubject(e.target.value)}
+            id="complaintId"
+            value={selectedComplaintId}
+            onChange={(e) => setSelectedComplaintId(e.target.value)}
+            placeholder="Enter Complaint ID"
           />
         </div>
         <div className="input-container">
-          <label htmlFor="updateDescription">Update Description:</label>
+          <label htmlFor="statusUpdate">Update Status:</label>
           <input
             type="text"
-            id="updateDescription"
-            value={updateDescription}
-            onChange={(e) => setUpdateDescription(e.target.value)}
+            id="statusUpdate"
+            value={statusUpdate}
+            onChange={(e) => setStatusUpdate(e.target.value)}
+            placeholder="Enter new status"
           />
+          <button onClick={() => handleUpdateStatus(selectedComplaintId)}>
+            Update Status
+          </button>
         </div>
         <div className="input-container">
-          <label htmlFor="newStatus">New Status:</label>
+          <label htmlFor="actionUpdate">Update Action:</label>
           <input
             type="text"
-            id="newStatus"
-            value={newStatus}
-            onChange={(e) => setNewStatus(e.target.value)}
+            id="actionUpdate"
+            value={actionUpdate}
+            onChange={(e) => setActionUpdate(e.target.value)}
+            placeholder="Enter action update"
           />
+          <button onClick={() => handleUpdateAction(selectedComplaintId)}>
+            Update Action
+          </button>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Complaint ID</th>
-              <th>Complainant Name</th>
-              <th>Contact</th>
-              <th>Incident Details</th>
-              <th>Location</th>
-              <th>Date and Time</th>
-              <th>Address</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {firs.map((fir) => (
-              <tr key={fir.complaintId}>
-                <td>{fir.complaintId}</td>
-                <td>{fir.complainantName}</td>
-                <td>{fir.complainantContact}</td>
-                <td>{fir.incidentDetails}</td>
-                <td>{fir.location}</td>
-                <td>{fir.dateTime}</td>
-                <td>{fir.address}</td>
-                <td className="status-cell">
-                  {fir.status}
-                  <ul>
-                    {fir.updates.map((update, updateIndex) => (
-                      <li key={updateIndex}>{`${update[0]}: ${update[1]} - ${update[2]}`}</li>
-                    ))}
-                  </ul>
-                </td>
-                <td className="action-cell">
-                  <button onClick={() => handleAddUpdate(fir.complaintId)}>Add Update</button>
-                  <button onClick={() => handleStatusUpdate(fir.complaintId)}>Update Status</button>
-                </td>
+      </div>
+      <div className='status-list'>
+        <h2>Complaint Status List</h2>
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Complaint ID</th>
+                <th>Complainant Name</th>
+                <th>Contact</th>
+                <th>Incident Details</th>
+                <th>Location</th>
+                <th>Date and Time</th>
+                <th>Address</th>
+                <th>State</th>
+                <th>Status</th>
+                <th>Timestamp</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {firs.map((fir) => (
+                <tr key={fir.id}>
+                  <td>{fir.id}</td>
+                  <td>{fir.complainantName}</td>
+                  <td>{fir.complainantContact}</td>
+                  <td>{fir.incidentDetails}</td>
+                  <td>{fir.location}</td>
+                  <td>{fir.dateTime}</td>
+                  <td>{fir.address}</td>
+                  <td>{fir.state}</td>
+                  <td>{fir.status}</td>
+                  <td>{fir.timestamp}</td>
+                  <td>
+                    <button onClick={() => handleUpdateStatus(fir.id)}>
+                      Update Status
+                    </button>
+                    <button onClick={() => handleUpdateAction(fir.id)}>
+                      Update Action
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className='status-display'>
+        <h2>Selected Complaint Status</h2>
+        <p>{selectedComplaintStatus}</p>
       </div>
     </div>
   );

@@ -13,10 +13,15 @@ const Complaint = () => {
   const [location, setLocation] = useState('');
   const [address, setAddress] = useState('');
   const [state, setState] = useState('');
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [dateTime, setDateTime] = useState('');
 
   const generateRandomId = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+    let newId;
+    do {
+      newId = Math.floor(100000 + Math.random() * 900000).toString();
+    } while (firs.some(fir => fir.id === newId));
+
+    return newId;
   };
 
   useEffect(() => {
@@ -38,36 +43,37 @@ const Complaint = () => {
       const newId = generateRandomId();
       await police_fir_backend.submitFir({
         id: newId,
-        complainantName,
         complainantContact,
-        incidentDetails,
-        location,
+        complainantName,
         address,
+        dateTime,
+        location,
+        incidentDetails,
         state,
+        updates: [],
         timestamp,
       });
       const updatedFirs = await police_fir_backend.getFirDetails();
       setFirs(updatedFirs);
+
+      // Wait for the state to be updated
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Use the newId after the state is updated
       setId(newId);
+
       setComplainantName('');
       setComplainantContact('');
       setIncidentDetails('');
       setLocation('');
       setAddress('');
       setState('');
+      setDateTime('');
       alert("Complaint submitted successfully!");
+      console.log("Complaint submitted successfully!");
+      console.log("New Complaint ID:", newId);
     } catch (error) {
       console.error("Error adding complaint:", error);
-    }
-  };
-
-  const handleSearchFir = async () => {
-    try {
-      const singleFir = await police_fir_backend.getSingleFir(searchKeyword);
-      console.log("Single FIR:", singleFir);
-      // Handle the single FIR data as needed
-    } catch (error) {
-      console.error("Error fetching single FIR:", error);
     }
   };
 
@@ -111,6 +117,15 @@ const Complaint = () => {
           />
         </div>
         <div className="input-container">
+          <label htmlFor="dateTime">Date and Time:</label>
+          <input
+            type="datetime-local"
+            id="dateTime"
+            value={dateTime}
+            onChange={(e) => setDateTime(e.target.value)}
+          />
+        </div>
+        <div className="input-container">
           <label htmlFor="location">Location:</label>
           <input
             type="text"
@@ -137,51 +152,6 @@ const Complaint = () => {
           />
         </div>
         <button onClick={handleAddComplaint}>Submit Complaint</button>
-      </div>
-      <div className='complaint-list'>
-        <h2>Complaint List</h2>
-        <div className="search-container">
-          <label htmlFor="searchKeyword">Search FIR by Complaint ID:</label>
-          <input
-            type="text"
-            id="searchKeyword"
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-          />
-          <button onClick={handleSearchFir}>Search</button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Complaint ID</th>
-              <th>Complainant Name</th>
-              <th>Contact</th>
-              <th>Incident Details</th>
-              <th>Location</th>
-              <th>State</th>
-              <th>Date and Time</th>
-              <th>Address</th>
-              <th>Status</th>
-              <th>Timestamp</th>
-            </tr>
-          </thead>
-          <tbody>
-            {firs.map((fir) => (
-              <tr key={fir.id}>
-                <td>{fir.id}</td>
-                <td>{fir.complainantName}</td>
-                <td>{fir.complainantContact}</td>
-                <td>{fir.incidentDetails}</td>
-                <td>{fir.location}</td>
-                <td>{fir.state}</td>
-                <td>{fir.dateTime}</td>
-                <td>{fir.address}</td>
-                <td>{fir.status}</td>
-                <td>{fir.timestamp}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
     </div>
   );
