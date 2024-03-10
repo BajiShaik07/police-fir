@@ -35,7 +35,7 @@ const Home = () => {
       const identityProvider =
         process.env.DFX_NETWORK === "ic"
           ? "https://identity.ic0.app/#authorize"
-          : `http://${process.env.CANISTER_ID_internet_identity}.localhost:4943`;
+          : `http://bkyz2-fmaaa-aaaaa-qaaaq-cai.localhost:4943`;
 
       authClient.login({
         maxTimeToLive: BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000),

@@ -30,7 +30,7 @@ actor {
     timestamp : Text;
     updates : [(Text, Text)];
     state : Text;
-    // status :Text;
+    status :Text;
   };
 
   type Police = {
@@ -307,6 +307,7 @@ actor {
           timestamp = fir.timestamp;
           updates = Array.append<(Text, Text)>(fir.updates, Array.make<(Text, Text)>((subject, description)));
           state = fir.state;
+          status = fir.status;
         };
         var new_firs = Array.filter<Fir>(firs, func x = x.id != id);
         new_firs := Array.append<Fir>(new_firs, [newFir]);

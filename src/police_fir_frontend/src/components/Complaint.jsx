@@ -35,23 +35,24 @@ const Complaint = () => {
     };
 
     fetchFir();
+    setId(generateRandomId());
   }, []);
 
   const handleAddComplaint = async () => {
     try {
       const timestamp = new Date().toISOString();
-      const newId = generateRandomId();
       await police_fir_backend.submitFir({
-        id: newId,
+        id: id,
         complainantContact,
         complainantName,
         address,
         dateTime,
         location,
         incidentDetails,
-        state,
-        updates: [],
         timestamp,
+        updates: [],
+        state,
+        status : ""
       });
       const updatedFirs = await police_fir_backend.getFirDetails();
       setFirs(updatedFirs);
@@ -60,8 +61,7 @@ const Complaint = () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
 
       // Use the newId after the state is updated
-      setId(newId);
-
+      setId(generateRandomId());
       setComplainantName('');
       setComplainantContact('');
       setIncidentDetails('');
@@ -71,7 +71,6 @@ const Complaint = () => {
       setDateTime('');
       alert("Complaint submitted successfully!");
       console.log("Complaint submitted successfully!");
-      console.log("New Complaint ID:", newId);
     } catch (error) {
       console.error("Error adding complaint:", error);
     }

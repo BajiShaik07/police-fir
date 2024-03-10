@@ -55,9 +55,9 @@ const PList = () => {
       const updatedFirs = await police_fir_backend.getFirDetails();
       setFirs(updatedFirs);
 
-      const updatedFir = updatedFirs.find(fir => fir.id === complaintId);
+      const updatedFir = updatedFirs.find(fir => fir.id == complaintId);
       if (updatedFir) {
-        setSelectedComplaintStatus(`Action: ${updatedFir.updates[0].text} (Updated)`);
+        setSelectedComplaintStatus(`Action: ${updatedFir.updates[1]} (Updated)`);
       }
 
       console.log(`Action updated successfully for Complaint ID: ${complaintId}`);

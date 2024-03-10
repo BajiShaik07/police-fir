@@ -1,8 +1,8 @@
 // CList.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { police_fir_backend } from "declarations/police_fir_backend";
-import './CList.css';
+import "./CList.css";
 
 const CList = () => {
   const [firs, setFirs] = useState([]);
@@ -22,7 +22,7 @@ const CList = () => {
   }, []);
 
   return (
-    <div className='complaint-list'>
+    <div className="complaint-list">
       <h2>Complaint List</h2>
       <div className="table-container">
         <table>
@@ -54,9 +54,18 @@ const CList = () => {
                 <td>{fir.state}</td>
                 <td>{fir.status}</td>
                 <td>{fir.timestamp}</td>
-                <td>
-                  {/* Add your action buttons here */}
-                </td>
+                <td
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      fir.updates.length > 0
+                        ? fir.updates
+                            .map((action) => {
+                              return action[1] + "<br />";
+                            })
+                            .join("")
+                        : "No Actions Available",
+                  }}
+                />
               </tr>
             ))}
           </tbody>
