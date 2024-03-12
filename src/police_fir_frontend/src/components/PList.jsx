@@ -1,15 +1,15 @@
 // PList.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { police_fir_backend } from "declarations/police_fir_backend";
-import './PList.css';
+import "./PList.css";
 
 const PList = () => {
   const [firs, setFirs] = useState([]);
-  const [selectedComplaintId, setSelectedComplaintId] = useState('');
-  const [statusUpdate, setStatusUpdate] = useState('');
-  const [actionUpdate, setActionUpdate] = useState('');
-  const [selectedComplaintStatus, setSelectedComplaintStatus] = useState('');
+  const [selectedComplaintId, setSelectedComplaintId] = useState("");
+  const [statusUpdate, setStatusUpdate] = useState("");
+  const [actionUpdate, setActionUpdate] = useState("");
+  const [selectedComplaintStatus, setSelectedComplaintStatus] = useState("");
 
   useEffect(() => {
     const fetchFir = async () => {
@@ -32,17 +32,19 @@ const PList = () => {
       const updatedFirs = await police_fir_backend.getFirDetails();
       setFirs(updatedFirs);
 
-      const updatedFir = updatedFirs.find(fir => fir.id === complaintId);
+      const updatedFir = updatedFirs.find((fir) => fir.id === complaintId);
       if (updatedFir) {
         setSelectedComplaintStatus(`Status: ${updatedFir.status} (Updated)`);
       }
 
-      console.log(`Status updated successfully for Complaint ID: ${complaintId}`);
+      console.log(
+        `Status updated successfully for Complaint ID: ${complaintId}`
+      );
       console.log("Updated FIR details:", updatedFirs);
       console.log("Selected Complaint Status:", selectedComplaintStatus);
 
-      setSelectedComplaintId('');
-      setStatusUpdate('');
+      setSelectedComplaintId("");
+      setStatusUpdate("");
     } catch (error) {
       console.error("Error updating status:", error);
     }
@@ -50,30 +52,38 @@ const PList = () => {
 
   const handleUpdateAction = async (complaintId) => {
     try {
-      await police_fir_backend.addUpdateInFir(complaintId, 'Action', actionUpdate);
+      await police_fir_backend.addUpdateInFir(
+        complaintId,
+        "Action",
+        actionUpdate
+      );
 
       const updatedFirs = await police_fir_backend.getFirDetails();
       setFirs(updatedFirs);
 
-      const updatedFir = updatedFirs.find(fir => fir.id == complaintId);
+      const updatedFir = updatedFirs.find((fir) => fir.id == complaintId);
       if (updatedFir) {
-        setSelectedComplaintStatus(`Action: ${updatedFir.updates[1]} (Updated)`);
+        setSelectedComplaintStatus(
+          `Action: ${updatedFir.updates[1]} (Updated)`
+        );
       }
 
-      console.log(`Action updated successfully for Complaint ID: ${complaintId}`);
+      console.log(
+        `Action updated successfully for Complaint ID: ${complaintId}`
+      );
       console.log("Updated FIR details:", updatedFirs);
       console.log("Selected Complaint Status:", selectedComplaintStatus);
 
-      setSelectedComplaintId('');
-      setActionUpdate('');
+      setSelectedComplaintId("");
+      setActionUpdate("");
     } catch (error) {
       console.error("Error updating action:", error);
     }
   };
 
   return (
-    <div className='status-container'>
-      <div className='update-section'>
+    <div className="status-container">
+      <div className="update-section">
         <h2>Update Status and Action</h2>
         <div className="input-container">
           <label htmlFor="complaintId">Complaint ID:</label>
@@ -112,7 +122,7 @@ const PList = () => {
           </button>
         </div>
       </div>
-      <div className='status-list'>
+      <div className="status-list">
         <h2>Complaint Status List</h2>
         <div className="table-container">
           <table>
@@ -126,6 +136,7 @@ const PList = () => {
                 <th>Date and Time</th>
                 <th>Address</th>
                 <th>State</th>
+                <th>District</th>
                 <th>Status</th>
                 <th>Timestamp</th>
                 <th>Actions</th>
@@ -142,23 +153,28 @@ const PList = () => {
                   <td>{fir.dateTime}</td>
                   <td>{fir.address}</td>
                   <td>{fir.state}</td>
+                  <td>{fir.district}</td>
                   <td>{fir.status}</td>
                   <td>{fir.timestamp}</td>
-                  <td>
-                    <button onClick={() => handleUpdateStatus(fir.id)}>
-                      Update Status
-                    </button>
-                    <button onClick={() => handleUpdateAction(fir.id)}>
-                      Update Action
-                    </button>
-                  </td>
+                  <td
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        fir.updates.length > 0
+                          ? fir.updates
+                              .map((action) => {
+                                return action[1] + "<br />";
+                              })
+                              .join("")
+                          : "No Actions Available",
+                    }}
+                  />
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
-      <div className='status-display'>
+      <div className="status-display">
         <h2>Selected Complaint Status</h2>
         <p>{selectedComplaintStatus}</p>
       </div>

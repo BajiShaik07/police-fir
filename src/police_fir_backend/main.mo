@@ -31,6 +31,7 @@ actor {
     updates : [(Text, Text)];
     state : Text;
     status :Text;
+    district : Text;
   };
 
   type Police = {
@@ -281,6 +282,10 @@ actor {
     // array.filter vadi single fir ni return cheyyali
     return Array.find<Fir>(firs, func x = x.id == id);
   };
+  public shared query func getSingleFirDistrict(district : Text) : async ?Fir {
+    // array.filter vadi single fir ni return cheyyali
+    return Array.find<Fir>(firs, func x = x.id == district);
+  };
 
   public shared func addUpdateInFir(id : Text, subject : Text, description : Text) : async {
     statusCode : Nat;
@@ -308,6 +313,7 @@ actor {
           updates = Array.append<(Text, Text)>(fir.updates, Array.make<(Text, Text)>((subject, description)));
           state = fir.state;
           status = fir.status;
+          district = fir.district;
         };
         var new_firs = Array.filter<Fir>(firs, func x = x.id != id);
         new_firs := Array.append<Fir>(new_firs, [newFir]);
@@ -346,6 +352,7 @@ actor {
           timestamp = fir.timestamp;
           updates = fir.updates;
           state = fir.state;
+          district = fir.district;
         };
         var new_firs = Array.filter<Fir>(firs, func x = x.id != id);
         new_firs := Array.append<Fir>(new_firs, [newFir]);

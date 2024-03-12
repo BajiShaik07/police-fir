@@ -36,6 +36,7 @@ const CList = () => {
               <th>Date and Time</th>
               <th>Address</th>
               <th>State</th>
+              <th>Pin Code</th>
               <th>Status</th>
               <th>Timestamp</th>
               <th>Actions</th>
@@ -52,6 +53,7 @@ const CList = () => {
                 <td>{fir.dateTime}</td>
                 <td>{fir.address}</td>
                 <td>{fir.state}</td>
+                <td>{fir.pin}</td>
                 <td>{fir.status}</td>
                 <td>{fir.timestamp}</td>
                 <td

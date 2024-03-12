@@ -1,5 +1,3 @@
-// Complaint.jsx
-
 import React, { useState, useEffect } from 'react';
 import { police_fir_backend } from "declarations/police_fir_backend";
 import './Complaint.css';
@@ -14,6 +12,17 @@ const Complaint = () => {
   const [address, setAddress] = useState('');
   const [state, setState] = useState('');
   const [dateTime, setDateTime] = useState('');
+  const [district, setDistrict] = useState('');
+
+  // State variables for input validation
+  const [complainantNameError, setComplainantNameError] = useState('');
+  const [complainantContactError, setComplainantContactError] = useState('');
+  const [incidentDetailsError, setIncidentDetailsError] = useState('');
+  const [locationError, setLocationError] = useState('');
+  const [addressError, setAddressError] = useState('');
+  const [stateError, setStateError] = useState('');
+  const [dateTimeError, setDateTimeError] = useState('');
+  const [districtError, setDistrictError] = useState('');
 
   const generateRandomId = () => {
     let newId;
@@ -52,15 +61,14 @@ const Complaint = () => {
         timestamp,
         updates: [],
         state,
-        status : ""
+        status: "null",
+        district
       });
       const updatedFirs = await police_fir_backend.getFirDetails();
       setFirs(updatedFirs);
 
-      // Wait for the state to be updated
       await new Promise((resolve) => setTimeout(resolve, 0));
 
-      // Use the newId after the state is updated
       setId(generateRandomId());
       setComplainantName('');
       setComplainantContact('');
@@ -69,12 +77,31 @@ const Complaint = () => {
       setAddress('');
       setState('');
       setDateTime('');
+      setDistrict('');
       alert("Complaint submitted successfully!");
       console.log("Complaint submitted successfully!");
     } catch (error) {
       console.error("Error adding complaint:", error);
     }
   };
+
+  // Updated list of districts in Andhra Pradesh
+  const districtsInAP = [
+    "Anantapur",
+    "Chittoor",
+    "East Godavari",
+    "Guntur",
+    "Krishna",
+    "Kurnool",
+    "NTR",
+    "Nellore",
+    "Prakasam",
+    "Srikakulam",
+    "Visakhapatnam",
+    "Vizianagaram",
+    "West Godavari",
+    "Y.S.R. Kadapa",
+  ];
 
   return (
     <div className='complaint-container'>
@@ -96,7 +123,9 @@ const Complaint = () => {
             id="complainantName"
             value={complainantName}
             onChange={(e) => setComplainantName(e.target.value)}
+            required
           />
+          <span className="error">{complainantNameError}</span>
         </div>
         <div className="input-container">
           <label htmlFor="complainantContact">Complainant Contact:</label>
@@ -105,7 +134,9 @@ const Complaint = () => {
             id="complainantContact"
             value={complainantContact}
             onChange={(e) => setComplainantContact(e.target.value)}
+            required
           />
+          <span className="error">{complainantContactError}</span>
         </div>
         <div className="input-container">
           <label htmlFor="incidentDetails">Incident Details:</label>
@@ -113,7 +144,9 @@ const Complaint = () => {
             id="incidentDetails"
             value={incidentDetails}
             onChange={(e) => setIncidentDetails(e.target.value)}
+            required
           />
+          <span className="error">{incidentDetailsError}</span>
         </div>
         <div className="input-container">
           <label htmlFor="dateTime">Date and Time:</label>
@@ -122,7 +155,9 @@ const Complaint = () => {
             id="dateTime"
             value={dateTime}
             onChange={(e) => setDateTime(e.target.value)}
+            required
           />
+          <span className="error">{dateTimeError}</span>
         </div>
         <div className="input-container">
           <label htmlFor="location">Location:</label>
@@ -131,7 +166,9 @@ const Complaint = () => {
             id="location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            required
           />
+          <span className="error">{locationError}</span>
         </div>
         <div className="input-container">
           <label htmlFor="address">Address:</label>
@@ -139,7 +176,9 @@ const Complaint = () => {
             id="address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+            required
           />
+          <span className="error">{addressError}</span>
         </div>
         <div className="input-container">
           <label htmlFor="state">State:</label>
@@ -148,7 +187,24 @@ const Complaint = () => {
             id="state"
             value={state}
             onChange={(e) => setState(e.target.value)}
+            required
           />
+          <span className="error">{stateError}</span>
+        </div>
+        <div className="input-container">
+          <label htmlFor="district">District :</label>
+          <select
+            id="district"
+            value={district}
+            onChange={(e) => setDistrict(e.target.value)}
+            required
+          >
+            <option value="" disabled>Select District</option>
+            {districtsInAP.map((districtOption, index) => (
+              <option key={index} value={districtOption}>{districtOption}</option>
+            ))}
+          </select>
+          <span className="error">{districtError}</span>
         </div>
         <button onClick={handleAddComplaint}>Submit Complaint</button>
       </div>

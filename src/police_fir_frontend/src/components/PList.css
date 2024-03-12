@@ -1,60 +1,29 @@
 /* PList.css */
 
-.complaint-container {
-  width: 80%;
-  margin: auto;
-  padding: 20px;
+/* Styles for the Update Status and Update Action buttons */
+.update-section button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.complaint-list {
-  margin-top: 20px;
+.update-section button:hover {
+  background-color: blue;
 }
 
-.table-container {
-  overflow-x: auto;
+/* Styles for the buttons in the table */
+.table-container button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-.status-cell ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.status-cell li {
-  margin-bottom: 5px;
-}
-
-.action-cell button {
-  margin-right: 5px;
-}
-
-/* Mobile responsiveness */
-@media only screen and (max-width: 600px) {
-  .complaint-container {
-    width: 100%;
-    padding: 10px;
-  }
-
-  th, td {
-    font-size: 12px;
-  }
-
-  .action-cell button {
-    margin-bottom: 5px;
-  }
+.table-container button:hover {
+  background-color: blue;
 }

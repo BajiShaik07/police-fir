@@ -1,97 +1,44 @@
 /* Complaint.css */
 
-/* Global styles */
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f8f8f8;
-}
-
-/* Complaint container styles */
+/* Style for the complaint-container */
 .complaint-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-/* Complaint form styles */
+/* Style for the complaint-form */
 .complaint-form {
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 20px;
-  background-color: #fff;
+  background-color: #f5f5f5;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 400px; /* Adjust the width as needed */
 }
 
+/* Style for the input-container */
 .input-container {
   margin-bottom: 15px;
 }
 
-/* Style for color input and text color */
-.input-container input[type="color"] {
-  color: black;
+/* Style for error messages */
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
 }
 
-/* Style for button */
-.input-container button {
+/* Style for the Submit Complaint button */
+.complaint-form button {
   background-color: red;
   color: white;
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
+  padding: 10px 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.input-container button:hover {
+.complaint-form button:hover {
   background-color: blue;
-}
-
-/* Complaint list styles */
-.complaint-list {
-  width: 100%;
-  max-width: 800px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Table styles */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-/* Search container styles */
-.search-container {
-  margin-bottom: 15px;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .complaint-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .complaint-form,
-  .complaint-list {
-    width: 100%;
-  }
 }
