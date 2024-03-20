@@ -5,7 +5,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  max-width: 100vh;
+  height: 100%;
+  margin-top: 35px;
 }
 
 /* Style for the complaint-form */

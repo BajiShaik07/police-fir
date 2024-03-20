@@ -1,82 +1,78 @@
+/* Home.css */
 
-.h{
+/* Header Styles */
+.h {
   text-align: center;
-  color: blue;
-  font-family: 'Times New Roman', Times, serif;
-}
-.h a{
-  font-family: 'Times New Roman', Times, serif;
-}
-.t {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  text-align: right;
-  z-index: 2; /* Set a higher z-index value */
-  font-family: 'Times New Roman', Times, serif; /* Set font to Times New Roman */
+  background-color: #333;
+  color: white;
+  padding: 20px;
 }
 
-.t a {
-  padding: 10px 20px; /* Add padding to style it like a button */
-  font-size: 16px;
-font-family: 'Times New Roman', Times, serif;
-  text-decoration: none; /* Remove the default underline for links */
-  color: #fff; /* Set text color to white */
-  background-color: red; /* Set background color */
-  border-radius: 5px; /* Add border-radius for rounded corners */
-  margin-right: 10px;
-}
-
-.t a:hover {
-  background-color: #0056b3; /* Change background color on hover */
-}
-
-.t button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  background-color: red;
-  color: #fff;
-  border: none;
-  font-family: 'Times New Roman', Times, serif;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-.t button:hover {
-  background-color:#0056b3;
-}
-
-/* Style for the complaint background */
+/* Background Image and Content Styles */
 .complaint-bg {
   position: relative;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
 }
 
 .complaint-bg img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 30px;
+  height: auto;
 }
 
-/* Add styles for the header and navigation */
-header {
-  position: relative;
-  z-index: 1; /* Set a lower z-index value compared to .t */
+/* Top Right Positioned Elements */
+.t {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
-/* Set a higher z-index value for the navigation bar to appear in front */
-nav {
-  position: relative;
-  z-index: 2; /* Set a higher z-index value */
+/* Connect Wallet Button Styles */
+.t button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
 }
-@media only screen and (max-width: 600px) {
-  .complaint-list {
-    width: 100%;
+
+/* Signup Link Styles */
+.signup {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none; /* Remove underline */
+}
+
+.signup:hover {
+  background-color: blue; /* Change color on hover */
+}
+
+/* Button Hover Effect */
+.t button:hover {
+  background-color: blue;
+}
+
+/* Media Queries for Various Screen Resolutions */
+@media screen and (max-width: 992px) {
+  .t {
+    top: 15px;
+    right: 15px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .t {
+    top: 10px;
+    right: 10px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .t {
+    top: 5px;
+    right: 5px;
   }
 }

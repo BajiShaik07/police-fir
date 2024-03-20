@@ -27,28 +27,29 @@ const Home = () => {
     console.log("handleConnect clicked");
     var authClient = await AuthClient.create();
     if (identity !== null) {
-      authClient.logout();
-      setIdentity(null);
-      setUserName(null);
-      console.log("User Logged Out");
+        authClient.logout();
+        setIdentity(null);
+        setUserName(null);
+        console.log("User Logged Out");
     } else {
-      const identityProvider =
-        process.env.DFX_NETWORK === "ic"
-          ? "https://identity.ic0.app/#authorize"
-          : `http://localhost:4943?canisterId=${process.env.CANISTER_ID_internet_identity}`;
+        const identityProvider =
+            process.env.DFX_NETWORK === "ic"
+                ? "https://identity.ic0.app/#authorize"
+                : `http://bkyz2-fmaaa-aaaaa-qaaaq-cai.localhost:4943`;
 
-      authClient.login({
-        maxTimeToLive: BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000),
-        identityProvider: identityProvider,
-        onSuccess: async () => {
-          const userIdentity = await authClient.getIdentity();
-          setIdentity(userIdentity);
-          setUserName(userIdentity.getPrincipal().toText());
-          console.log("User Logged In:", userIdentity.getPrincipal().toText());
-        },
-      });
+        authClient.login({
+            maxTimeToLive: BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000),
+            identityProvider: identityProvider,
+            onSuccess: async () => {
+                const userIdentity = await authClient.getIdentity();
+                setIdentity(userIdentity);
+                setUserName(userIdentity.getPrincipal().toText());
+                console.log("User Logged In:", userIdentity.getPrincipal().toText());
+            },
+        });
     }
-  }
+}
+
 
   return (
     <div>
@@ -60,7 +61,8 @@ const Home = () => {
       <div className='complaint-bg'>
         <img src={home} alt="home" />
         <div className='t'>
-          <Link to="/signup">Signup</Link><br />
+        <Link to="/signup" className="signup">Signup</Link><br />
+
           <br />
           <button onClick={handleConnect}>{identity ? 'Logout' : 'Connect Wallet'}</button>
         </div>

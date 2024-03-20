@@ -271,19 +271,17 @@ actor {
   };
 
 
-
-  var firs : [Fir] = [];
+//get fir details
+var firs : [Fir] = [];
 
   public shared func submitFir(fir : Fir) : async () {
     firs := Array.append<Fir>(firs, [fir]);
   };
 
   public shared query func getSingleFir(id : Text) : async ?Fir {
-    // array.filter vadi single fir ni return cheyyali
     return Array.find<Fir>(firs, func x = x.id == id);
   };
   public shared query func getSingleFirDistrict(district : Text) : async ?Fir {
-    // array.filter vadi single fir ni return cheyyali
     return Array.find<Fir>(firs, func x = x.id == district);
   };
 
@@ -292,7 +290,6 @@ actor {
     msg : Text;
   } {
     var fir = Array.find<Fir>(firs, func x = x.id == id);
-    // Array.append<Text>(doct_req, Array.make<Text>(uuid)) Array.size<Text>(doctor.requests)
     switch (fir) {
       case (null) {
         return {

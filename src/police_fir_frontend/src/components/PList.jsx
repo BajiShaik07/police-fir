@@ -58,10 +58,20 @@ const PList = () => {
         actionUpdate
       );
 
+      // Get current timestamp
+      const currentTimestamp = new Date().toISOString();
+
+      // Update timestamp along with action
+      await police_fir_backend.addUpdateInFir(
+        complaintId,
+        "Timestamp",
+        currentTimestamp
+      );
+
       const updatedFirs = await police_fir_backend.getFirDetails();
       setFirs(updatedFirs);
 
-      const updatedFir = updatedFirs.find((fir) => fir.id == complaintId);
+      const updatedFir = updatedFirs.find((fir) => fir.id === complaintId);
       if (updatedFir) {
         setSelectedComplaintStatus(
           `Action: ${updatedFir.updates[1]} (Updated)`
