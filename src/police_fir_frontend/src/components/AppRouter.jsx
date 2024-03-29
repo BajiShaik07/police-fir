@@ -1,24 +1,25 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Home';
-import PoliceProfile from './NavProfile';
-import ClientProfile from './ClientNavbarProfile';
-import Signup from './SignUp';
+import SignUp from './SignUp';
+import PoliceProfile from './NavPolice';
+import UserProfile from './NavUser';
 import Complaint from './Complaint';
-import CList from './CList';
+import UList from './UList';
 import PList from './PList';
 
 const AppRouter = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/policeprofile" element={<PoliceProfile />} />
-      <Route path="/userprofile" element={<ClientProfile />} />
-      <Route path="/complaint" element={<Complaint />} />
-      <Route path="/clist" element={<CList />} />
-      <Route path="/plist" element={<PList />} />
-    </Routes>
+    
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/policeProfile" element={<PoliceProfile />} />
+        <Route path="/userProfile" element={<UserProfile />} />
+        <Route path="/complaint" element={<Complaint />} />
+        <Route path="/uList" element={<UList />} />
+        <Route path="/plist" element={<PList />} />
+      </Routes>
   );
 };
 

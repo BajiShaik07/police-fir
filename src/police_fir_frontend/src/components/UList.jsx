@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { police_fir_backend } from "declarations/police_fir_backend";
 import "./CList.css";
 
-const CList = () => {
+const UList = () => {
   const [firs, setFirs] = useState([]);
 
   useEffect(() => {
@@ -77,4 +77,4 @@ const CList = () => {
   );
 };
 
-export default CList;
+export default UList;

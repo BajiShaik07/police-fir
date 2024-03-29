@@ -1,7 +1,8 @@
 import React from 'react';
+import { FaUser } from 'react-icons/fa'; // Import the FaUser icon from react-icons/fa
 import '../Profile.css'; // Import the CSS file
 
-const PoliceProfile = ({ principal, name, dob, gender, specialization,noofreq, isBlurred }) => {
+const PoliceProfile = ({ principal, name, dob, gender, specialization, noofreq, isBlurred }) => {
   const profileClass = isBlurred ? 'profile-section ps blurred' : 'profile-section ps';
 
   return (
@@ -17,14 +18,13 @@ const PoliceProfile = ({ principal, name, dob, gender, specialization,noofreq, i
           <span className="green box"></span>
         </div>
       </div>
-      <i className="profile-pic fa-solid fa-user fa-2xl"></i>
+      <FaUser className="profile-pic" size="2rem" /> {/* Use the FaUser icon component */}
       <div className="profile-info">
         <p><b>Principal:</b> {principal}</p>
         <p><b>Name: </b>{name}</p>
         <p><b>Date of Birth:</b> {dob}</p>
         <p><b>Gender:</b> {gender}</p>
         <p><b>Specialization:</b> {specialization}</p>
-        <p><b>No.of Complaints:</b> {noofreq}</p>
       </div>
     </div>
   );

@@ -4,11 +4,10 @@ import { police_fir_backend } from "declarations/police_fir_backend";
 import { AuthClient } from "@dfinity/auth-client";
 import { canisterId, createActor } from "declarations/police_fir_backend";
 import { Principal } from "@dfinity/principal";
-import '../SignUp.css';
+import './SignUp.css';
 
-function SignUp({ }) {
+function SignUp() {
   const [isPolice, setIsPolice] = useState(true);
-
   const [principal, setPrincipal] = useState("");
   const [isConnected, setIsConnected] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -69,7 +68,6 @@ function SignUp({ }) {
     } else {
       actor = police_fir_backend;
     }
-
   }
 
   useEffect(() => {
@@ -79,13 +77,9 @@ function SignUp({ }) {
     sendRequest();
   }, []);
 
-
-
-
   const toggleUserType = () => {
     setIsPolice((prevIsPolice) => !prevIsPolice);
   };
-
 
   async function ski() {
     var name = document.getElementById("name").value;
@@ -98,7 +92,7 @@ function SignUp({ }) {
     } else {
       g = { Female: null };
     }
-    if(!isConnected){
+    if (!isConnected) {
       alert("Connect Wallet to continue");
     }
     var authClient = await AuthClient.create();
@@ -114,48 +108,43 @@ function SignUp({ }) {
         alert("Fill in All Details to Signup.");
         return;
       }
-    
       var resp = await actor.createPolice(name, dob, g, specialization);
-      if(resp.statusCode == BigInt(200)){
+      if (resp.statusCode == BigInt(200)) {
         setIsxPolice(true);
-      }else{
+      } else {
         alert(resp.msg);
       }
 
-    }
-    else {
+    } else {
       if ((name == null || name == "") || (dob == null || dob == "") || (gender == null || gender == "")) {
         alert("Fill in All Details to Signup.");
         return;
       }
       var resp = await actor.createUser(name, dob, g);
-      if(resp.statusCode == BigInt(200)){
+      if (resp.statusCode == BigInt(200)) {
         setIsUser(true);
-      }else{
+      } else {
         alert(resp.msg);
       }
 
     }
   }
 
-
-
   return (
-
     <div className="signup-container">
       {
-        isxPolice ? <Navigate to="/policeprofile" /> : null
+        isxPolice ? <Navigate to="/policeProfile" /> : null
       }
       {
-        isUser ? <Navigate to="/userprofile" /> : null
+        isUser ? <Navigate to="/userProfile"  /> : null
       }
       <div className={`content ${isPolice ? 'left' : 'right'}`}>
         <div className={`left-content ${isPolice ? '' : 'blur'}`}>
-          <img
-            src="police-image.png"
+          {/*<img
+            src="police-imag.png"
             alt="police"
             className="image"
-          />
+    />*/}
           <p className="label">Police</p>
         </div>
         <label className={`switch ${isPolice ? 'left' : 'right'}`}>
@@ -168,21 +157,19 @@ function SignUp({ }) {
           <span className="slider"></span>
         </label>
         <div className={`right-content ${isPolice ? 'blur' : ''}`}>
-          <img
+          {/*<img
             src="user-image.png"
-            alt="User"
+            alt="user"
             className="image"
-          />
+    />*/}
           <p className="label">User</p>
         </div>
       </div>
       <div className="signup-form">
-        <h2>Sign up as a {isPolice ? 'Police' : 'User'}</h2>
-        {/* Add your signup form fields here */}
-        {/* Example: */}
+        <h2>Sign up as a {isPolice ? 'Police' : 'user'}</h2>
         <form>
           <label>
-            Username:
+            Fullname:
             <input id='name' type="name" />
           </label>
           <label>
@@ -197,16 +184,14 @@ function SignUp({ }) {
               <option value='female'>Female</option>
             </select>
           </label>
-          <label style={{ display: `${isPolice ? `block` : `none`}` }}>
-            Specialization:
+          <label style={{ display: isPolice ? 'block' : 'none' }}>
+            Mobile Number:
             <input id="specialization" type='text' />
           </label>
-
-
         </form>
         <button type="submit" onClick={ski} className='btn1'>Sign Up</button>
       </div>
-      <ul class="background">
+      <ul className="background">
         <li></li>
         <li></li>
         <li></li>

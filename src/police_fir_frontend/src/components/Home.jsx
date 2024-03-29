@@ -4,6 +4,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import './Home.css';
 import home from '../../public/bg.jpg';
 import { Link } from 'react-router-dom';
+import Footer from './Footer';
 
 const Home = () => {
   const [identity, setIdentity] = useState(null);
@@ -52,6 +53,7 @@ const Home = () => {
 
 
   return (
+    <>
     <div>
       
       <header className='h'>
@@ -68,6 +70,8 @@ const Home = () => {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

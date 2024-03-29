@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { police_fir_backend } from "declarations/police_fir_backend";
 import './Complaint.css';
+import logo from '../../public/complaint.jpg';
 
 const Complaint = () => {
   const [firs, setFirs] = useState([]);
@@ -49,6 +50,41 @@ const Complaint = () => {
 
   const handleAddComplaint = async () => {
     try {
+      // Validate all fields
+      if (!complainantName) {
+        setComplainantNameError('Complainant Name is required');
+        return;
+      }
+      if (!complainantContact) {
+        setComplainantContactError('Complainant Contact is required');
+        return;
+      }
+      if (!incidentDetails) {
+        setIncidentDetailsError('Incident Details are required');
+        return;
+      }
+      if (!dateTime) {
+        setDateTimeError('Date and Time are required');
+        return;
+      }
+      if (!location) {
+        setLocationError('Location is required');
+        return;
+      }
+      if (!address) {
+        setAddressError('Address is required');
+        return;
+      }
+      if (!state) {
+        setStateError('State is required');
+        return;
+      }
+      if (!district) {
+        setDistrictError('District is required');
+        return;
+      }
+
+      // If all fields are filled, proceed to submit complaint
       const timestamp = new Date().toISOString();
       await police_fir_backend.submitFir({
         id: id,
@@ -105,6 +141,7 @@ const Complaint = () => {
 
   return (
     <div className='complaint-container'>
+      <img className='logo' src={logo} alt="Complaint" />
       <div className='complaint-form'>
         <h2>File a Complaint</h2>
         <div className="input-container">
@@ -122,7 +159,10 @@ const Complaint = () => {
             type="text"
             id="complainantName"
             value={complainantName}
-            onChange={(e) => setComplainantName(e.target.value)}
+            onChange={(e) => {
+              setComplainantName(e.target.value);
+              setComplainantNameError('');
+            }}
             required
           />
           <span className="error">{complainantNameError}</span>
@@ -133,7 +173,10 @@ const Complaint = () => {
             type="text"
             id="complainantContact"
             value={complainantContact}
-            onChange={(e) => setComplainantContact(e.target.value)}
+            onChange={(e) => {
+              setComplainantContact(e.target.value);
+              setComplainantContactError('');
+            }}
             required
           />
           <span className="error">{complainantContactError}</span>
@@ -143,7 +186,10 @@ const Complaint = () => {
           <textarea
             id="incidentDetails"
             value={incidentDetails}
-            onChange={(e) => setIncidentDetails(e.target.value)}
+            onChange={(e) => {
+              setIncidentDetails(e.target.value);
+              setIncidentDetailsError('');
+            }}
             required
           />
           <span className="error">{incidentDetailsError}</span>
@@ -154,7 +200,10 @@ const Complaint = () => {
             type="datetime-local"
             id="dateTime"
             value={dateTime}
-            onChange={(e) => setDateTime(e.target.value)}
+            onChange={(e) => {
+              setDateTime(e.target.value);
+              setDateTimeError('');
+            }}
             required
           />
           <span className="error">{dateTimeError}</span>
@@ -165,17 +214,24 @@ const Complaint = () => {
             type="text"
             id="location"
             value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            onChange={(e) => {
+              setLocation(e.target.value);
+              setLocationError('');
+            }}
             required
           />
           <span className="error">{locationError}</span>
         </div>
         <div className="input-container">
           <label htmlFor="address">Address:</label>
-          <textarea
+          <input 
+            type="text"
             id="address"
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(e) => {
+              setAddress(e.target.value);
+              setAddressError('');
+            }}
             required
           />
           <span className="error">{addressError}</span>
@@ -186,7 +242,10 @@ const Complaint = () => {
             type="text"
             id="state"
             value={state}
-            onChange={(e) => setState(e.target.value)}
+            onChange={(e) => {
+              setState(e.target.value);
+              setStateError('');
+            }}
             required
           />
           <span className="error">{stateError}</span>
@@ -196,7 +255,10 @@ const Complaint = () => {
           <select
             id="district"
             value={district}
-            onChange={(e) => setDistrict(e.target.value)}
+            onChange={(e) => {
+              setDistrict(e.target.value);
+              setDistrictError('');
+            }}
             required
           >
             <option value="" disabled>Select District</option>

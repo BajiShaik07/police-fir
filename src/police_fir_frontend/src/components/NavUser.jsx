@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Link, Navigate } from 'react-router-dom';
-import '../Profile.css'; // Import the CSS file
-import CProfile from './CProfile.jsx';
-
+import React, { useState, useEffect } from "react";
+import { Link, Navigate } from "react-router-dom";
+import "../Profile.css"; // Import the CSS file
+import CProfile from "./UserProfile";
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 import { police_fir_backend } from "declarations/police_fir_backend";
 import { AuthClient } from "@dfinity/auth-client";
 import { canisterId, createActor } from "declarations/police_fir_backend";
 import { Principal } from "@dfinity/principal";
 
-const ClientNavbarProfile = () => {
+const NavUser = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBlurred, setIsBlurred] = useState(false);
-  const [dob, setDob] = useState('');
-  const [name, setName] = useState('');
+  const [dob, setDob] = useState("");
+  const [name, setName] = useState("");
   const [gender, setGender] = useState("");
   const [noofdoc, setNoofdoc] = useState(0);
   const [noofreq, setNoofreq] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-
-
 
   //authentication starts
 
@@ -66,9 +64,10 @@ const ClientNavbarProfile = () => {
     } else {
       authClient.login({
         maxTimeToLive: BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000),
-        identityProvider: process.env.DFX_NETWORK === "ic"
-          ? "https://identity.ic0.app/#authorize"
-          : `http://localhost:4943?canisterId=${process.env.CANISTER_ID_internet_identity}`,
+        identityProvider:
+          process.env.DFX_NETWORK === "ic"
+            ? "https://identity.ic0.app/#authorize"
+            : `http://localhost:4943?canisterId=${process.env.CANISTER_ID_internet_identity}`,
         onSuccess: async () => {
           handleAuthenticated(authClient);
         },
@@ -84,7 +83,6 @@ const ClientNavbarProfile = () => {
     } else {
       actor = police_fir_backend;
     }
-
   }
 
   useEffect(() => {
@@ -112,57 +110,69 @@ const ClientNavbarProfile = () => {
     setIsMenuOpen(!isMenuOpen);
     setIsBlurred(!isBlurred); // Toggle the blur effect when the menu is opened/closed
   };
-  const hamburger_class = isMenuOpen ? 'hamburger hamburger--spring is-active' : 'hamburger hamburger--spring';
-  return (
-    (isLoading == false) ? (
+  const hamburger_class = isMenuOpen
+    ? "hamburger hamburger--spring is-active"
+    : "hamburger hamburger--spring";
+  return isLoading == false ? (
+    <div className="navbar-container profile-body">
+      {!isUser ? <Navigate to="/" /> : null}
 
-      <div className="navbar-container profile-body">
-        {(!isUser) ? (<Navigate to="/" />) : (null)}
-
-        <nav className="navbar"> {/* Use the class name directly */}
-          <div className="logo">
-            <span className='nav-heading'>User</span>
-          </div>
-          <div className="profile">
-            <a href="/userprofile">
-              <img src="user-image.png" alt="Profile Pic" />
-            </a>
-            {/* <span>Hello, {userName}</span> */}
-            <button className={hamburger_class} type="button" onClick={toggleMenu}>
-              <span className="hamburger-box">
-                <span className="hamburger-inner"></span>
-              </span>
-            </button>
-          </div>
-        </nav>
-        <CProfile
-          principal={principal}
-          name={name}
-          dob={dob}
-          gender={gender}
-          policesVisited={noofdoc}
-          NoofRecords={noofreq}
-          isBlurred={isBlurred} // Pass the blur state to the Profile component
-        />
-        <div className={`dropdown-menu ${isMenuOpen ? 'open' : ''}`}>
-          <div className='dropdown-box'>
-            <Link className='button' to="/complaint">Raise Complaint</Link>
-            <Link className='button' to="/clist">Complaint List</Link>
-          </div>
-          <div className='dropdown-box'>
-            <hr />
-            <button className='button' onClick={handleWalletClick}>Logout</button>
-            <div className="social-icons">
-              <i className="fab fa-facebook"></i>
-              <i className="fab fa-twitter"></i>
-              <i className="fab fa-instagram"></i>
-            </div>
+      <nav className="navbar">
+        {" "}
+        {/* Use the class name directly */}
+        <div className="logo">
+          <span className="nav-heading">User</span>
+        </div>
+        <div className="profile">
+          <a href="/userprofile">
+            <img src="user-image.png" alt="Profile Pic" />
+          </a>
+          {/* <span>Hello, {userName}</span> */}
+          <button
+            className={hamburger_class}
+            type="button"
+            onClick={toggleMenu}
+          >
+            <span className="hamburger-box">
+              <span className="hamburger-inner"></span>
+            </span>
+          </button>
+        </div>
+      </nav>
+      <CProfile
+        principal={principal}
+        name={name}
+        dob={dob}
+        gender={gender}
+        policesVisited={noofdoc}
+        NoofRecords={noofreq}
+        isBlurred={isBlurred} // Pass the blur state to the Profile component
+      />
+      <div className={`dropdown-menu ${isMenuOpen ? "open" : ""}`}>
+        <div className="dropdown-box">
+          <Link className="button" to="/complaint">
+            Raise Complaint
+          </Link>
+          <Link className="button" to="/uList">
+            Complaint List
+          </Link>
+        </div>
+        <div className="dropdown-box">
+          <hr />
+          <button className="button" onClick={handleWalletClick}>
+            Logout
+          </button>
+          <div className="social-icons">
+            <FaFacebook />
+            <FaTwitter />
+            <FaInstagram />
           </div>
         </div>
+      </div>
+    </div>
+  ) : (
+    <div>Loading...</div>
+  );
+};
 
-      </div>) : (<div>Loading...</div>)
-
-  )
-}
-
-export default ClientNavbarProfile;
+export default NavUser;
